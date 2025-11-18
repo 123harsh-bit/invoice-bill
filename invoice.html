@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Bill / Invoice - Ganesh Neuro Rehabilitation</title>
+<style>
+  /* --- Page / print --- */
+  @page { size: A4; margin: 20mm; }
+  body { font-family: "Arial", sans-serif; background:#f6f6f6; padding:20px; color:#111; }
+  .page { width:210mm; min-height:297mm; margin:0 auto; background:#fff; padding:18mm; box-shadow:0 0 8px rgba(0,0,0,0.08); box-sizing:border-box; }
+
+  /* header */
+  .header { display:flex; align-items:center; gap:18px; }
+  .logo { width:110px; height:110px; display:flex; align-items:center; justify-content:center; }
+  .logo img { max-width:100%; max-height:100%; display:block; }
+  .head-text { flex:1; text-align:center; color:#5b0f6c; }
+  .head-text h1 { margin:0; font-size:26px; letter-spacing:0.5px; }
+  .head-text h2 { margin:4px 0 0 0; font-size:22px; font-weight:700; color:#5b0f6c; }
+  .head-sub { margin-top:6px; font-size:12px; color:#333; }
+
+  hr.style { border: none; border-top: 3px solid #5b0f6c; margin:12px 0 18px 0; }
+
+  .contact { font-size:13px; margin-bottom:8px; color:#111; }
+
+  /* meta fields layout */
+  .meta-row { margin:8px 0 18px 0; font-size:14px; display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; align-items:center; }
+  .meta-left { flex:1; max-width:60%; display:flex; gap:12px; align-items:flex-start; }
+  .meta-right { min-width:160px; display:flex; gap:12px; align-items:flex-start; justify-content:flex-end; }
+
+  .field-label { font-weight:700; min-width:120px; white-space:nowrap; }
+  .field-value { flex:1; }
+
+  /* Inputs (screen) */
+  input[type="text"], input[type="date"], input[type="number"] {
+    padding:6px 8px; border:1px solid #bbb; border-radius:3px; font-size:13px; width:100%; box-sizing:border-box;
+  }
+  input[type="number"] { text-align:right; }
+
+  /* table */
+  table.items { width:100%; border-collapse:collapse; margin-top:8px; }
+  table.items thead th { background:#000; color:#fff; padding:10px; text-align:left; font-size:14px; }
+  table.items td, table.items th { border:1px solid #000; padding:10px; font-size:14px; vertical-align:middle; }
+  table.items tbody tr td:nth-child(2),
+  table.items tbody tr td:nth-child(3),
+  table.items tbody tr td:nth-child(4) { text-align:right; }
+
+  .controls { margin:12px 0; display:flex; gap:8px; }
+  .controls button { padding:8px 12px; border-radius:4px; border:1px solid #bbb; background:#fff; cursor:pointer; }
+
+  .totals { margin-top:14px; float:right; min-width:220px; }
+  .totals table { width:100%; border-collapse:collapse; }
+  .totals td { padding:8px 10px; font-size:14px; border:1px solid #000; }
+  .totals tr.total-row td { font-weight:700; font-size:16px; }
+
+  .signature { margin-top:64px; clear:both; display:flex; justify-content:space-between; align-items:center; }
+  .signature .sig-line { border-bottom:1px solid #000; width:300px; padding-bottom:6px; }
+  .signature .date { font-size:13px; color:#111; }
+
+  .note { margin-top:18px; font-size:12px; color:#444; }
+
+  /* Hide number input spinners (Chrome/Edge/Safari) */
+  input[type=number]::-webkit-outer-spin-button,
+  input[type=number]::-webkit-inner-spin-button { -webkit-appearance:none; margin:0; }
+  /* Firefox */
+  input[type=number] { -moz-appearance:textfield; }
+
+  /* Print-only vs screen-only elements */
+  .print-only { display:none; }
+  .screen-only { display:block; }
+
+  @media print {
+    /* hide UI elements */
+    .controls, .screen-only { display:none !important; }
+    /* show print-only text (inline style preserved) */
+    .print-only { display:block !important; }
+    /* Inputs shouldn't show borders in case they remain */
+    input, textarea, select { border:none !important; box-shadow:none !important; outline:none !important; background:transparent !important; }
+  }
+
+  /* make print-only inline label/value pairs align horizontally */
+  .print-row { display:flex; justify-content:space-between; gap:20px; align-items:center; }
+  .print-left, .print-right { display:flex; gap:12px; align-items:center; }
+  .print-label { font-weight:700; white-space:nowrap; }
+  .print-value { white-space:nowrap; }
+
+  /* responsive */
+  @media (max-width:700px) {
+    .head-text h1 { font-size:20px; }
+    .head-text h2 { font-size:18px; }
+    .logo { width:80px; height:80px; }
+    .page { padding:12mm; }
+    .meta-left { flex-direction:column; align-items:flex-start; gap:6px; }
+    .meta-right { justify-content:flex-start; }
+  }
+</style>
+</head>
+<body>
+<div class="page" id="page">
+  <div class="header">
+    <div class="logo">
+      <!-- Replace Drive ID if you want a different logo -->
+      <img src="https://drive.google.com/uc?export=view&id=1y_OqkL4udjxIEJAG1ZmaDQnju8mopdcX" alt="logo">
+    </div>
+    <div class="head-text">
+      <h1>GANESH NEURO REHABILITATION &amp;</h1>
+      <h2>PHYSIOTHERAPY CENTRE</h2>
+      <div class="head-sub">Radiant Hospital 4<sup>th</sup> Floor, Kotakomma la St, Reddy &amp; Reddy's Colony, Tirupati, Andhra Pradesh</div>
+      <div class="head-sub"><strong>DR. K. Ganesh PT, BPT, MPT (Ortho)</strong> &nbsp;&nbsp; Phone: +91 9666602070</div>
+    </div>
+  </div>
+
+  <hr class="style">
+
+  <div class="contact">Kotakomma la Street, Reddy &amp; Reddy's Colony &nbsp;&nbsp; Phone: +91 9666602070</div>
+
+  <!-- Screen inputs -->
+  <div class="meta-row screen-only">
+    <div class="meta-left">
+      <div style="min-width:120px;" class="field-label">Patient Name:</div>
+      <div class="field-value"><input id="patientName" type="text" value="Mrs. Naseema"></div>
+    </div>
+
+    <div class="meta-right">
+      <div style="min-width:60px;" class="field-label">Age:</div>
+      <div style="width:90px;" class="field-value"><input id="age" type="text" value="50"></div>
+    </div>
+  </div>
+
+  <div class="meta-row screen-only" style="margin-top:6px;">
+    <div style="width:40%;" class="meta-left">
+      <div class="field-label">Bill Date:</div>
+      <div class="field-value"><input id="billDate" type="date" value="2025-11-15"></div>
+    </div>
+    <div style="flex:1;"></div>
+  </div>
+
+  <div class="meta-row screen-only" style="margin-top:6px;">
+    <div style="width:100%;" class="meta-left">
+      <div class="field-label" style="min-width:130px;">Period of Stay:</div>
+      <div style="flex:1;">
+        <input id="admitDate" type="date" value="2025-11-03" style="width:48%; display:inline-block;">
+        &nbsp; to &nbsp;
+        <input id="dischargeDate" type="date" value="2025-11-15" style="width:48%; display:inline-block;">
+        <div id="stayDays" style="margin-top:6px; font-weight:700;">(0 DAYS)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Print-only header fields (inline, fixed) -->
+  <div class="print-only" style="margin-top:6px;">
+    <div class="print-row" style="margin-bottom:6px;">
+      <div class="print-left">
+        <div class="print-label">Patient Name:</div>
+        <div id="p_patientName" class="print-value"></div>
+      </div>
+      <div class="print-right">
+        <div class="print-label">Age:</div>
+        <div id="p_age" class="print-value"></div>
+      </div>
+    </div>
+
+    <div class="print-row" style="margin-bottom:6px;">
+      <div class="print-left">
+        <div class="print-label">Bill Date:</div>
+        <div id="p_billDate" class="print-value"></div>
+      </div>
+      <div class="print-right">
+        <div class="print-label">Period of Stay:</div>
+        <div id="p_period" class="print-value" style="font-weight:700;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Controls (screen only) -->
+  <div class="controls screen-only">
+    <button id="addRowBtn" type="button">+ Add Row</button>
+    <button id="removeRowBtn" type="button">- Remove Last Row</button>
+    <button id="printBtn" type="button">Print / Save as PDF</button>
+  </div>
+
+  <!-- Items table -->
+  <table class="items" id="itemsTable">
+    <thead>
+      <tr>
+        <th style="width:62%;">Particulars</th>
+        <th style="width:12%;">Qty</th>
+        <th style="width:13%;">Rate (₹)</th>
+        <th style="width:13%;">Amount (₹)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <input type="text" class="desc screen-only" value="Room Charges + Nursing + Physio + Doctor Visit (12 Days × 3000)">
+          <div class="print-only" id="p_desc_0"></div>
+        </td>
+        <td>
+          <input type="number" class="qty screen-only" value="12" min="0">
+          <div class="print-only right" id="p_qty_0"></div>
+        </td>
+        <td>
+          <input type="number" class="rate screen-only" value="3000" min="0">
+          <div class="print-only right" id="p_rate_0"></div>
+        </td>
+        <td class="amount right">
+          <div class="screen-only amount" id="a0">36,000</div>
+          <div class="print-only right" id="p_amount_0"></div>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <input type="text" class="desc screen-only" value="Balance Payment">
+          <div class="print-only" id="p_desc_1"></div>
+        </td>
+        <td>
+          <input type="number" class="qty screen-only" value="1" min="0">
+          <div class="print-only right" id="p_qty_1"></div>
+        </td>
+        <td>
+          <input type="number" class="rate screen-only" value="6000" min="0">
+          <div class="print-only right" id="p_rate_1"></div>
+        </td>
+        <td class="amount right">
+          <div class="screen-only amount" id="a1">6,000</div>
+          <div class="print-only right" id="p_amount_1"></div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Totals -->
+  <div class="totals" id="totalsBox">
+    <table>
+      <tr>
+        <td style="width:60%;">Grand Total</td>
+        <td id="grandTotal" class="right screen-only">42,000</td>
+        <td class="print-only right" id="p_grandTotal" style="display:none; min-width:120px;"></td>
+      </tr>
+    </table>
+  </div>
+
+  <div style="clear:both;"></div>
+
+  <!-- Signature -->
+  <div class="signature">
+    <div>
+      <div style="font-size:13px;"><strong>Signature:</strong></div>
+      <div class="sig-line"></div>
+    </div>
+    <div class="date">
+      <div><strong>Date:</strong></div>
+      <div id="sigDate" class="screen-only">15-11-2025</div>
+      <div id="p_sigDate" class="print-only" style="display:none;"></div>
+    </div>
+  </div>
+
+  <div class="note">
+    <div class="screen-only">This is a computer generated bill. Keep this for records.</div>
+    <div class="print-only">This is a computer generated bill. Keep this for records.</div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const q = s => document.querySelector(s);
+  const qa = s => Array.from(document.querySelectorAll(s));
+  const formatNumber = n => n.toLocaleString('en-IN', {maximumFractionDigits: 0});
+
+  // Header inputs
+  const patientName = q('#patientName');
+  const age = q('#age');
+  const billDate = q('#billDate');
+  const admitDate = q('#admitDate');
+  const dischargeDate = q('#dischargeDate');
+  const stayDays = q('#stayDays');
+
+  // update print placeholders for header fields
+  function updateHeaderPrint(){
+    q('#p_patientName').textContent = patientName ? patientName.value : '';
+    q('#p_age').textContent = age ? age.value : '';
+
+    if (billDate && billDate.value) {
+      const d = billDate.value.split('-'); // yyyy-mm-dd
+      q('#p_billDate').textContent = `${d[2]}-${d[1]}-${d[0]}`;
+      q('#p_sigDate').textContent = `${d[2]}-${d[1]}-${d[0]}`;
+      q('#sigDate').textContent = `${d[2]}-${d[1]}-${d[0]}`;
+    } else {
+      q('#p_billDate').textContent = '';
+      q('#p_sigDate').textContent = '';
+    }
+
+    if (admitDate && dischargeDate && admitDate.value && dischargeDate.value){
+      const a = admitDate.value.split('-'), b = dischargeDate.value.split('-');
+      q('#p_period').textContent = `${a[2]}-${a[1]}-${a[0]} to ${b[2]}-${b[1]}-${b[0]}`;
+    } else {
+      q('#p_period').textContent = '';
+    }
+  }
+
+  // compute inclusive days and display on screen
+  function updateStay(){
+    if (!admitDate || !dischargeDate || !admitDate.value || !dischargeDate.value) {
+      if (stayDays) stayDays.textContent = '(0 DAYS)';
+      return;
+    }
+    const a = new Date(admitDate.value), b = new Date(dischargeDate.value);
+    const msPerDay = 24*60*60*1000;
+    const diff = Math.floor((b.getTime() - a.getTime())/msPerDay) + 1;
+    const days = diff >= 0 ? diff : 0;
+    if (stayDays) stayDays.textContent = `(${days} DAYS)`;
+    updateHeaderPrint();
+  }
+
+  // update row placeholders and totals
+  function updateRowsAndTotals(){
+    const rows = qa('#itemsTable tbody tr');
+    let total = 0;
+    rows.forEach((row, idx) => {
+      const desc = row.querySelector('.desc');
+      const qty = row.querySelector('.qty');
+      const rate = row.querySelector('.rate');
+      const amountDiv = row.querySelector('.amount');
+      const qv = Number(qty?.value || 0);
+      const rv = Number(rate?.value || 0);
+      const amount = qv * rv;
+      total += amount;
+      if (amountDiv) amountDiv.textContent = formatNumber(amount);
+
+      // print placeholders
+      const pdesc = q(`#p_desc_${idx}`);
+      const pqty = q(`#p_qty_${idx}`);
+      const prate = q(`#p_rate_${idx}`);
+      const pamount = q(`#p_amount_${idx}`);
+      if (pdesc) pdesc.textContent = desc ? desc.value : '';
+      if (pqty) pqty.textContent = qv ? qv.toString() : '';
+      if (prate) prate.textContent = rv ? formatNumber(rv) : '';
+      if (pamount) pamount.textContent = formatNumber(amount);
+    });
+
+    const gt = q('#grandTotal');
+    if (gt) gt.textContent = formatNumber(total);
+    const pgt = q('#p_grandTotal');
+    if (pgt) { pgt.textContent = formatNumber(total); pgt.style.display = 'table-cell'; }
+  }
+
+  // hook inputs and buttons
+  function hookAll(){
+    [patientName, age, billDate, admitDate, dischargeDate].forEach(ele=>{
+      if (!ele) return;
+      ele.addEventListener('input', updateHeaderPrint);
+      ele.addEventListener('change', () => { updateHeaderPrint(); updateStay(); });
+    });
+
+    function hookRowInputs(row){
+      row.querySelectorAll('input').forEach(inp => inp.addEventListener('input', updateRowsAndTotals));
+    }
+    qa('#itemsTable tbody tr').forEach(hookRowInputs);
+
+    q('#addRowBtn').addEventListener('click', function(){
+      const tbody = q('#itemsTable tbody');
+      const idx = tbody.querySelectorAll('tr').length;
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>
+          <input type="text" class="desc screen-only" value="New Item">
+          <div class="print-only" id="p_desc_${idx}"></div>
+        </td>
+        <td>
+          <input type="number" class="qty screen-only" value="1" min="0">
+          <div class="print-only right" id="p_qty_${idx}"></div>
+        </td>
+        <td>
+          <input type="number" class="rate screen-only" value="0" min="0">
+          <div class="print-only right" id="p_rate_${idx}"></div>
+        </td>
+        <td class="amount right">
+          <div class="screen-only amount" id="a${idx}">0</div>
+          <div class="print-only right" id="p_amount_${idx}"></div>
+        </td>
+      `;
+      tbody.appendChild(tr);
+      hookRowInputs(tr);
+      updateRowsAndTotals();
+    });
+
+    q('#removeRowBtn').addEventListener('click', function(){
+      const tbody = q('#itemsTable tbody');
+      const rows = tbody.querySelectorAll('tr');
+      if (rows.length > 0) {
+        tbody.removeChild(rows[rows.length - 1]);
+        updateRowsAndTotals();
+      }
+    });
+
+    q('#printBtn').addEventListener('click', function(){
+      updateHeaderPrint();
+      updateRowsAndTotals();
+      window.print();
+    });
+  }
+
+  // init
+  updateHeaderPrint();
+  updateStay();
+  updateRowsAndTotals();
+  hookAll();
+
+})();
+</script>
+</body>
+</html>
