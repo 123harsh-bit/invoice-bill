@@ -48,7 +48,9 @@
   .controls { margin:12px 0; display:flex; gap:8px; }
   .controls button { padding:8px 12px; border-radius:4px; border:1px solid #bbb; background:#fff; cursor:pointer; }
 
-  .totals { margin-top:14px; float:right; min-width:220px; }
+  /* totals: use flex wrapper so alignment remains stable in print */
+  .totals-wrapper { width:100%; display:flex; justify-content:flex-end; margin-top:12px; }
+  .totals { display:flex; justify-content:flex-end; min-width:260px; }
   .totals table { width:100%; border-collapse:collapse; }
   .totals td { padding:8px 10px; font-size:14px; border:1px solid #000; }
   .totals tr.total-row td { font-weight:700; font-size:16px; }
@@ -99,7 +101,7 @@
 <div class="page" id="page">
   <div class="header">
     <div class="logo">
-      <!-- Replace Drive ID if you want a different logo -->
+      <!-- Use your repo logo file in root for GitHub Pages -->
       <img src="logo.png" alt="logo">
     </div>
     <div class="head-text">
@@ -230,15 +232,17 @@
     </tbody>
   </table>
 
-  <!-- Totals -->
-  <div class="totals" id="totalsBox">
-    <table>
-      <tr>
-        <td style="width:60%;">Grand Total</td>
-        <td id="grandTotal" class="right screen-only">42,000</td>
-        <td class="print-only right" id="p_grandTotal" style="display:none; min-width:120px;"></td>
-      </tr>
-    </table>
+  <!-- Fixed totals wrapper for proper alignment -->
+  <div class="totals-wrapper">
+    <div class="totals" id="totalsBox">
+      <table>
+        <tr>
+          <td style="width:60%;">Grand Total</td>
+          <td id="grandTotal" class="right screen-only">42,000</td>
+          <td class="print-only right" id="p_grandTotal" style="display:none; min-width:120px;"></td>
+        </tr>
+      </table>
+    </div>
   </div>
 
   <div style="clear:both;"></div>
